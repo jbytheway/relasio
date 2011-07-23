@@ -1,0 +1,3 @@
+[submodule "makeshift"]
+	path = makeshift
+	url = git://github.com/jbytheway/makeshift.git
