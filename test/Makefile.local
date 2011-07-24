@@ -1,1 +1,5 @@
 BIN := relasio-test
+LIBS := -lboost_system -lpthread
+
+test-nonrecursive: $(BIN)
+	./$<
