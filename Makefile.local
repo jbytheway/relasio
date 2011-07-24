@@ -1,1 +1,6 @@
-SUBDIRS := test
+SUBDIRS := relasio test
+
+all-recurse-test: all-recurse-relasio
+
+test-recurse-test: test-recurse-relasio
+

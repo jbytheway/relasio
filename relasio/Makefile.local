@@ -1,0 +1,3 @@
+BIN = librelasio.la
+LIBS := -lboost_filesystem -lboost_system -lpthread -lreadline
+

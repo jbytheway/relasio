@@ -1,5 +1,6 @@
 BIN := relasio-test
-LIBS := -lboost_system -lpthread
+LIB_DEP_NAMES := relasio
+THIS_LDFLAGS := -no-install
 
 test-nonrecursive: $(BIN)
 	./$<
