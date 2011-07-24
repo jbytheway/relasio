@@ -30,5 +30,7 @@ If it all works you can build the release version with
 
 $ make release
 
-This will build inside a directory called release.
+This will build inside a directory called release.  But, frankly, this is not a
+performance-critical application, so you're probably better off sticking to
+debug mode.
 
