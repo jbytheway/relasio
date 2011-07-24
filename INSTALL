@@ -1,0 +1,34 @@
+This project uses makeshift to build.  If the makeshift directory is empty then
+you probably need to run
+
+$ git submodule init
+$ git submodule update
+
+Next you will need some dependencies:
+
+- gcc >= 4.4 (this code uses recently added C++0x features so new gcc really is
+  needed; other compilers are unikely to cope in the near term).
+- boost (not sure which version exactly).  If your distro splits boost into
+  multiple packages you'll need Boost.Filesystem.
+- readline, obviously.
+
+You may need to add some things to user.mk, e.g. to get the right g++ version.  Here for example is my user.mk:
+
+  CXX = g++-4.4.1
+
+See makeshift/INSTALL for details of what goes in user.mk.
+
+Then to get a debug version it should be simply
+
+$ make
+
+and you can run the test app with
+
+$ make test
+
+If it all works you can build the release version with
+
+$ make release
+
+This will build inside a directory called release.
+
