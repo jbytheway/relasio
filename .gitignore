@@ -1,6 +1,7 @@
 .*.swp
 .makefrags
 .obj
+.libs
 /*/Makefile
 /config.mk
 /user.mk
