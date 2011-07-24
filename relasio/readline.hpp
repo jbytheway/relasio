@@ -7,6 +7,8 @@
 #include <boost/parameter/preprocessor.hpp>
 #include <boost/asio/io_service.hpp>
 
+#include <relasio/api.hpp>
+
 #if BOOST_PARAMETER_MAX_ARITY < 6
 #error Please increase BOOST_PARAMETER_MAX_ARITY
 #endif
@@ -28,7 +30,7 @@ inline bool default_history_filter(std::string const& s) {
   return !s.empty();
 }
 
-void default_eof_handler(readline&);
+RELASIO_API void default_eof_handler(readline&);
 
 struct readline_constructor_impl {
   class impl;
@@ -46,7 +48,7 @@ struct readline_constructor_impl {
     );
   }
 
-  void initialize(
+  RELASIO_API void initialize(
     boost::asio::io_service& io_service,
     boost::function<void(std::string const&, readline&)> const& command_handler,
     boost::function<void(readline&)> const& eof_handler,
@@ -61,7 +63,7 @@ struct readline_constructor_impl {
 
 }
 
-class readline :
+class RELASIO_API readline :
   private detail::readline_constructor_impl,
   private boost::noncopyable
 {

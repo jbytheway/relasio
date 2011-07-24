@@ -3,6 +3,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include <iostream>
+
 #include <boost/bind.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -156,6 +158,7 @@ void readline_constructor_impl::impl::chars_available(
   size_t bytes_transferred
 )
 {
+  static_cast<void>(bytes_transferred);
   assert(bytes_transferred == 0);
   if (ec) {
     stop();
