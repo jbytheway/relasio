@@ -84,9 +84,11 @@ class RELASIO_API readline :
       )
     )
 
-    void stop();
-
     void write(std::string const&);
+
+    void set_prompt(std::string const&);
+
+    void stop();
 
     friend class readline_constructor_impl;
 };

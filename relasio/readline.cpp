@@ -44,6 +44,7 @@ struct readline_constructor_impl::impl {
   );
   void line(char*);
   void write(std::string const& message);
+  void set_prompt(std::string const& prompt);
   void stop();
 
   // Things set in constructor
@@ -198,6 +199,16 @@ void readline_constructor_impl::impl::write(std::string const& message)
   }
 }
 
+void readline_constructor_impl::impl::set_prompt(std::string const& prompt)
+{
+  assert(current_readline == this);
+  prompt_ = prompt;
+  rl_set_prompt(prompt_.c_str());
+  std::cout << std::endl;
+  rl_on_new_line();
+  rl_redisplay();
+}
+
 void readline_constructor_impl::impl::stop()
 {
   if (current_readline == NULL) {
@@ -227,14 +238,19 @@ void readline_constructor_impl::impl::stop()
 
 } // namespace detail
 
-void readline::stop()
-{
-  impl_->stop();
-}
-
 void readline::write(std::string const& message)
 {
   impl_->write(message);
+}
+
+void readline::set_prompt(std::string const& prompt)
+{
+  impl_->set_prompt(prompt);
+}
+
+void readline::stop()
+{
+  impl_->stop();
 }
 
 }
