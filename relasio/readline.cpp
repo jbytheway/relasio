@@ -9,6 +9,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/asio/posix/stream_descriptor.hpp>
+#include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/placeholders.hpp>
 
 #include <relasio/relasio_error.hpp>
@@ -44,6 +45,8 @@ struct readline_constructor_impl::impl {
   );
   void line(char*);
   void write(std::string const& message);
+  void queue_redisplay();
+  void redisplay(boost::system::error_code const&);
   void set_prompt(std::string const& prompt);
   void stop();
 
@@ -60,6 +63,7 @@ struct readline_constructor_impl::impl {
   // Things used along the way
   std::string last_line_;
   boost::asio::posix::stream_descriptor stdin_reader_;
+  boost::asio::deadline_timer redisplay_timer_;
   boost::asio::null_buffers buffers_;
 };
 
@@ -104,7 +108,8 @@ readline_constructor_impl::impl::impl(
   prompt_(prompt),
   history_file_(history_file),
   history_filter_(history_filter),
-  stdin_reader_(io_service, 0) // Bind to stdin
+  stdin_reader_(io_service, 0), // Bind to stdin
+  redisplay_timer_(io_service)
 {
   if (current_readline) {
     throw std::logic_error("Can't create multiple relasio::readline objects");
@@ -188,9 +193,8 @@ void readline_constructor_impl::impl::line(char* l)
 void readline_constructor_impl::impl::write(std::string const& message)
 {
   if (current_readline == this) {
-    std::cout << '\n' << message << std::endl;
-    rl_on_new_line();
-    rl_redisplay();
+    std::cout << '\n' << message << std::flush;
+    queue_redisplay();
   } else {
     // We are no longer the "proper" readline instance.  Most likely this
     // happens during program shutdown.  For the benefit of such circumstances
@@ -199,14 +203,34 @@ void readline_constructor_impl::impl::write(std::string const& message)
   }
 }
 
+void readline_constructor_impl::impl::queue_redisplay()
+{
+  auto time = boost::posix_time::milliseconds(50);
+  redisplay_timer_.expires_from_now(time);
+  redisplay_timer_.async_wait(
+    boost::bind(&impl::redisplay, this, boost::asio::placeholders::error)
+  );
+}
+
+void readline_constructor_impl::impl::redisplay(
+  boost::system::error_code const& ec
+)
+{
+  if (ec) {
+    return;
+  }
+
+  std::cout << std::endl;
+  rl_on_new_line();
+  rl_redisplay();
+}
+
 void readline_constructor_impl::impl::set_prompt(std::string const& prompt)
 {
   assert(current_readline == this);
   prompt_ = prompt;
   rl_set_prompt(prompt_.c_str());
-  std::cout << std::endl;
-  rl_on_new_line();
-  rl_redisplay();
+  queue_redisplay();
 }
 
 void readline_constructor_impl::impl::stop()
@@ -218,6 +242,7 @@ void readline_constructor_impl::impl::stop()
 
   assert(detail::current_readline == this);
   stdin_reader_.cancel();
+  redisplay_timer_.cancel();
   rl_callback_handler_remove();
   detail::current_readline = NULL;
   std::cout << std::endl;
