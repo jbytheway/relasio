@@ -1,6 +1,6 @@
 BIN := relasio-test
 LIB_DEP_NAMES := relasio
-THIS_LDFLAGS := -no-install
+THIS_LDFLAGS := -no-install -lboost_system
 
 test-nonrecursive: $(BIN)
 	./$<
