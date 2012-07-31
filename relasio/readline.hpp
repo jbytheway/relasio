@@ -90,7 +90,7 @@ class RELASIO_API readline :
 
     void stop();
 
-    friend class readline_constructor_impl;
+    friend struct readline_constructor_impl;
 };
 
 }
