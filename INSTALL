@@ -6,8 +6,6 @@ $ git submodule update
 
 Next you will need some dependencies:
 
-- gcc >= 4.4 (this code uses recently added C++0x features so new gcc really is
-  needed; other compilers are unikely to cope in the near term).
 - boost (not sure which version exactly).  If your distro splits boost into
   multiple packages you'll need Boost.Filesystem.
 - readline, obviously.
