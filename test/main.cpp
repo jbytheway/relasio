@@ -8,8 +8,6 @@ struct CommandHandler {
   void operator()(std::string const& s, relasio::readline& readline) const {
     readline.write("You said: "+s);
   }
-
-  asio::deadline_timer& timer_;
 };
 
 struct F {
@@ -38,7 +36,7 @@ int main()
 {
   asio::io_service io;
   asio::deadline_timer timer(io, boost::posix_time::seconds(2));
-  CommandHandler command_handler = { timer };
+  CommandHandler command_handler = { };
   relasio::readline readline(io, command_handler);
   F handler = { 3, timer, readline };
   timer.async_wait(handler);
