@@ -1,5 +1,25 @@
-This project uses makeshift to build.  If the makeshift directory is empty then
-you probably need to run
+CMake
+=====
+
+This prohect should build with CMake in the usual way.  At its simplest, this
+should be:
+
+mkdir build
+cd build
+cmake ..
+make
+
+And optionally 'make install'
+
+
+Makeshift
+=========
+
+It is also possible to build with makeshift, my bespoke build system.  You
+probably don't want to do that, but in case you do; here's some guidance:
+
+
+If the makeshift directory is empty then you probably need to run
 
 $ git submodule init
 $ git submodule update
