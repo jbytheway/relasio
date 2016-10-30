@@ -7,14 +7,14 @@ Copyright (C) 2011  John Bytheway <jbytheway at that gmail place>
 
 For building instructions see INSTALL.
 
-Fearless contains the following components:
+Relasio contains the following components:
 
 - relasio
   The library.
 
 - test
   A small test app which mixes readline input and other asio events in one
-  event loop.
+  event loop.  Really more of a demo than a real test.
 
 
 LICENSE
