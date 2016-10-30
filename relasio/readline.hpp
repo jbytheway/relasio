@@ -73,7 +73,7 @@ class RELASIO_API readline :
       (detail::readline_constructor_impl),
       tag,
       (required
-        (in_out(io_service), (boost::asio::io_service&))
+        (in_out(io_service), (boost::asio::io_service))
         (command_handler, *)
       )
       (optional
@@ -83,7 +83,6 @@ class RELASIO_API readline :
         (history_filter, *)
       )
     )
-
     void write(std::string const&);
 
     void set_prompt(std::string const&);
