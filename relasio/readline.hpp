@@ -68,12 +68,19 @@ class RELASIO_API readline :
   private boost::noncopyable
 {
   public:
+    // Note in the declaration of io_service below, because io_service is
+    // non-copyable, and thus not convertible to itself, we can't use the
+    // Boost.Parameter shortcut of just providing the argument type.  Instead
+    // we must write a predicate manually (and in this case we require an exact
+    // match, which I think is OK because people are probably not making
+    // classes derived from io_srvice).
     BOOST_PARAMETER_CONSTRUCTOR(
       readline,
       (detail::readline_constructor_impl),
       tag,
       (required
-        (in_out(io_service), (boost::asio::io_service))
+        (in_out(io_service),
+          *(boost::is_same<boost::mpl::_1, boost::asio::io_service>))
         (command_handler, *)
       )
       (optional
@@ -83,6 +90,7 @@ class RELASIO_API readline :
         (history_filter, *)
       )
     )
+
     void write(std::string const&);
 
     void set_prompt(std::string const&);
